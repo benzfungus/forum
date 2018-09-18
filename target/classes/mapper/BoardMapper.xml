@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.benzfungus.forum.dao.BoardDao">
+
+
+    <insert id="insert" parameterType="cn.benzfungus.forum.domain.Board" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+		INSERT INTO `board`(name, `desc`, topic_num)
+		VALUE
+		(#{name},#{desc}, #{topicNum});
+	</insert>
+
+    <select id="getAll" resultType="cn.benzfungus.forum.domain.Board">
+		SELECT
+		id, name, `desc`, topic_num
+		FROM
+		board
+	</select>
+    <select id="getById" resultType="cn.benzfungus.forum.domain.Board" parameterType="java.lang.Long">
+		SELECT
+		b.id, name, `desc`, count(t.id) as topic_num
+		FROM
+		board b, topic t
+		WHERE
+		b.id = #{id} AND t.board_id = b.id
+	</select>
+    <delete id="deleteById" parameterType="java.lang.Long">
+	  	DELETE FROM board WHERE id = #{id}
+	</delete>
+
+    <update id="update" parameterType="cn.benzfungus.forum.domain.Board">
+        update board
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="desc != null">`desc`=#{desc},</if>
+            <if test="topicNum != null">topic_num=#{topicNum}</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+</mapper>

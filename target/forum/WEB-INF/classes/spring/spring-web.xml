@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!-- 配置SpringMVC -->
+    <!-- 1.开启SpringMVC注解模式 -->
+    <mvc:annotation-driven />
+
+
+    <!-- 定义视图解析器 -->
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--&lt;!&ndash; 文件上传解析器 &ndash;&gt;-->
+    <!--<bean id="multipartResolver"-->
+          <!--class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+        <!--<property name="defaultEncoding" value="utf-8"/>-->
+    <!--</bean>-->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ResourceBundleMessageSource" p:basename="i18n/messages"/>
+
+    <bean id="exceptionResolver"
+          class="cn.benzfungus.forum.web.controller.ForumHandlerExceptionResolver">
+        <property name="defaultErrorView"><value>fail</value></property>
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.RuntimeException">fail</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- 扫描WEB相关的bean -->
+    <context:component-scan base-package="cn.benzfungus.forum.web.*"/>
+
+    <mvc:resources location="/WEB-INF/static/img/" mapping="/img/**" />
+    <mvc:resources location="/WEB-INF/static/js/" mapping="/js/**" />
+    <mvc:resources location="/WEB-INF/static/css/" mapping="/css/**" />
+</beans>
